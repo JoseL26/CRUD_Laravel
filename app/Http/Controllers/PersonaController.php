@@ -46,6 +46,8 @@ class PersonaController extends Controller
         $personas->telefono = $request->telefono;
 
         $personas->save();
+
+        return response()->json(['message'=>'Registro creado con exito.']);
     }
 
     /**
@@ -99,9 +101,14 @@ class PersonaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request)
+    public function destroy($id)
     {
-        $personas = Persona::destroy($request->id);
-        return $personas;
+        $personas = Persona::find($id);
+        if (is_null($personas)) {
+            return response()->json(['message'=>'Registro no encontrado.']);
+        }
+
+        $personas->delete();
+        return response()->json(['message'=>'Registro eliminado con exito.']);
     }
 }
